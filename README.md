@@ -1,5 +1,11 @@
 # EcoMarket — Sistema Inteligente de Atención al Cliente
 
+**Autores:** Anderson Pipicano, Fredy Alvarez  
+**Asignatura:** Inteligencia Artificial Generativa  
+**Objetivo:** Extender las capacidades de **EcoBot** (desarrollado inicialmente en el Taller Práctico #1) mediante una arquitectura **RAG (*Retrieval-Augmented Generation*)**, permitiéndole consultar una base de conocimiento vectorial interna para responder con precisión cualquier solicitud de los clientes o informar de manera transparente cuando no cuenta con las herramientas o información para atenderla.
+
+
+
 Proyecto académico de **Inteligencia Artificial Generativa** orientado a mejorar la atención al cliente de **EcoMarket**, una plataforma de comercio electrónico de productos sostenibles.
 
 El proyecto parte de **EcoBot**, un asistente para consultas de clientes, y amplía sus capacidades mediante **generación aumentada por recuperación (RAG)**: antes de responder, el sistema consulta documentos de la empresa para fundamentar sus respuestas y reconocer cuándo no dispone de información o herramientas suficientes.
