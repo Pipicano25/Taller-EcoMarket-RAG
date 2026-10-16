@@ -4,7 +4,7 @@
 
 Esta fase amplía **EcoBot**, el asistente de atención al cliente de EcoMarket, mediante recuperación aumentada por generación (**RAG**). El sistema consulta documentos corporativos para responder preguntas sobre pedidos, productos, devoluciones, garantías y sostenibilidad. Además, integra un agente que **planifica consultas, ejecuta herramientas y evalúa si necesita realizar búsquedas adicionales**.
 
-La implementación se concentra en un único notebook: **`EcoMarket_RAG.ipynb`**. No se necesitan scripts `.py` adicionales.
+La implementación se concentra en un único notebook: **`EcoMarket_RAG.ipynb`**. No se necesitan scripts `.py` adicionales. **Este README describe la arquitectura prevista y el estado del notebook recibido; los pendientes de compatibilidad se identifican explícitamente para no confundir diseño con ejecución verificada.**
 
 > **Alcance académico:** los documentos y registros de pedidos representan un escenario de prueba. El código incluye las etapas de recuperación y orquestación; sus resultados deben verificarse mediante la ejecución del notebook. Las consultas de pedidos no son seguimiento en tiempo real.
 
@@ -93,19 +93,21 @@ No se necesita `HF_TOKEN` para descargar el modelo público `BAAI/bge-m3` y ejec
 
 ### 6.1. Instalar dependencias
 
-Desde una terminal ubicada en la carpeta `fase3/`:
+Desde una terminal ubicada en la carpeta `fase3/` (si se dispone de `requirements.txt`):
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-O desde una celda del notebook:
+O desde una celda del notebook, una vez que el directorio de trabajo apunte a `fase3/`:
 
 ```python
 %pip install -q -r requirements.txt
 ```
 
-**Importante:** si el notebook conserva una celda que instala librerías individualmente, reemplázala por la instrucción anterior para evitar duplicar instalaciones.
+**Estado del notebook adjunto:** actualmente ejecuta `%pip install -q -r /content/requirements.txt`. Esta ruta absoluta solo funciona si el archivo existe exactamente allí; se debe adaptar para ejecución local o para otra distribución de carpetas en Colab.
+
+**Importante:** unificar la instalación de dependencias y verificar dónde se encuentra `requirements.txt` antes de ejecutarla.
 
 ### 6.2. Configurar variables de entorno
 
@@ -132,7 +134,7 @@ if not os.getenv('OLLAMA_API_KEY'):
     raise ValueError('Falta OLLAMA_API_KEY en el archivo .env')
 ```
 
-El notebook consulta la clave mediante las variables de entorno; **si aún no tiene `load_dotenv()` incorporado, agrega el bloque anterior como celda de configuración**. Es necesario ejecutarlo antes de inicializar el cliente Ollama. El directorio de trabajo debe ser `fase3/` o se debe ajustar la ruta del archivo.
+El notebook consulta la clave mediante las variables de entorno; **el notebook ya incorpora `load_dotenv()`, pero utiliza actualmente la ruta fija `/content/.env`; debe sustituirse por una ubicación acorde con el entorno**. Es necesario ejecutarlo antes de inicializar el cliente Ollama. El directorio de trabajo debe ser `fase3/` o se debe ajustar la ruta del archivo.
 
 No publiques `.env` ni claves de API en GitHub. Si el repositorio dispone de un `.gitignore` en la raíz, asegúrate de que incluya `.env` y `chroma_db/`. Publica únicamente `.env.example`.
 
@@ -156,7 +158,7 @@ Abre **`EcoMarket_RAG.ipynb`** y ejecuta las celdas en el siguiente orden:
 | Demostración | Ejecuta una consulta compuesta. | Plan, pasos, revisiones y respuesta. |
 | Evaluación opcional | Compara configuraciones de chunking. | Tabla de **Hit@3**. |
 
-**Nota:** la descarga inicial de BGE-M3 y la construcción del índice pueden tardar. La conexión con Ollama Cloud necesita credenciales y disponibilidad del servicio.
+**Nota:** la descarga inicial de BGE-M3 y la construcción del índice pueden tardar. La conexión con Ollama Cloud necesita credenciales y disponibilidad del servicio. **Además, deben resolverse los pendientes del apartado 17 antes de repetir la ejecución en un entorno limpio.**
 
 ## 8. Extracción, chunking e indexación
 
@@ -180,9 +182,9 @@ El valor `1500/200` es una **configuración inicial**, no un óptimo demostrado.
 | `buscar_conocimiento` | Recupera fragmentos de políticas, manual, preguntas frecuentes e inventario mediante ChromaDB. |
 | `consultar_pedido` | Busca un pedido simulado por código **exacto** (`ECO-10004`). |
 | `consultar_producto` | Busca un producto por SKU **exacto** (`PROD-009`). |
-| `consultar_tracking_externo` | Permite consultar una API logística real de solo lectura **si se configura**; en el taller puede permanecer deshabilitada. |
+| `consultar_tracking_externo` | **No implementada ni registrada en el notebook recibido.** Es una extensión futura, no una función disponible en esta entrega. |
 
-Estas herramientas **no** cancelan pedidos, ejecutan reembolsos, cambian direcciones ni hacen operaciones bancarias. El agente está limitado a **cinco ejecuciones de herramientas por consulta**.
+Las tres herramientas implementadas **no** cancelan pedidos, ejecutan reembolsos, cambian direcciones ni hacen operaciones bancarias. El agente está limitado a **cinco ejecuciones de herramientas por consulta**.
 
 La búsqueda por identificadores exactos complementa la búsqueda semántica y reduce el riesgo de confundir referencias similares.
 
@@ -285,3 +287,16 @@ Los cuatro casos de evaluación incluidos sirven como demostración inicial. Par
 ---
 
 **EcoMarket | Taller Práctico #2 — Fase 3**
+
+
+## 17. Estado real del notebook y acciones previas a la entrega
+
+La revisión estática de `EcoMarket_RAG.ipynb` confirma que existen las etapas de extracción, segmentación, indexación, recuperación, herramientas exactas y orquestación LangGraph. **La presencia del código y de salidas almacenadas no sustituye una ejecución reproducible en un entorno limpio.**
+
+1. **Rutas de ejecución:** la celda de instalación apunta a `/content/requirements.txt` y la carga de entorno a `/content/.env`. Ajustar ambas según la estructura desplegada en Colab o Jupyter local; no asumir que el archivo está en `/content/`.
+2. **Contexto faltante:** `localizar_contexto()` puede devolver `None`, tras lo cual el notebook intenta `ROOT = CONTEXT.parent`. Añadir una validación explícita de `CONTEXT` y un mensaje de error antes de acceder a `.parent`.
+3. **Variable sin definir:** el prompt del planificador evalúa `bool(TRACKING_URL)`, pero el notebook recibido no define `TRACKING_URL`. Esto puede causar `NameError` al ejecutar el agente. Retirar esa referencia mientras no exista integración logística, o implementar la herramienta y su configuración de forma completa.
+4. **Herramientas reales:** `HERRAMIENTAS` contiene `buscar_conocimiento`, `consultar_pedido` y `consultar_producto`. El seguimiento externo es solo una posibilidad futura; no se debe presentar como activo.
+5. **Pruebas y rúbrica:** volver a ejecutar las celdas en orden con las cinco fuentes y una clave válida de Ollama; conservar evidencias de recuperación, planificación (`origen_plan`), replanificación (`revisiones`), respuesta fundamentada, abstención y evaluación opcional Hit@3.
+
+**Correspondencia con `caso_de_estudio_taller2.md`:** BGE-M3 se ejecuta en el entorno de trabajo mediante `HuggingFaceEmbeddings`, en modo denso; ChromaDB utiliza la colección `ecomarket_kb`; el LLM generativo es `glm-5.3-flash` por Ollama Cloud. Los modelos no garantizan ausencia de alucinaciones ni tiempos de respuesta específicos sin medición.
