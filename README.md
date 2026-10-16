@@ -8,8 +8,8 @@ El proyecto parte de **EcoBot**, un asistente para consultas de clientes, y ampl
 
 | Sección | Descripción | Documentación |
 | --- | --- | --- |
-| **Fases 1 y 2** | Selección y justificación de embeddings y base vectorial; diseño de la base de conocimiento y estrategia de segmentación. | [Caso de estudio del Taller 2](caso_de_estudio_taller2.md) |
-| **Fase 3** | Implementación del RAG y de un agente *Plan-and-Execute* con planificación, herramientas y replanificación, desarrollada en un notebook. | [Ver la Fase 3](fase3/README.md) |
+| **Fases 1 y 2** | Selección y justificación de embeddings y base vectorial; diseño de la base de conocimiento y estrategia de segmentación. | [Caso de estudio del Taller 2](fase1&2/caso_de_estudio_taller2.md) |
+| **Fase 3** | Implementación del RAG y de un agente *Plan-and-Execute* con planificación, herramientas y replanificación, desarrollada en un notebook. | [Ver la Fase 3](fase3) |
 
 ## Tecnologías principales
 
