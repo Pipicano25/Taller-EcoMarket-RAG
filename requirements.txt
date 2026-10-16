@@ -1,11 +1,23 @@
-langchain-core>=0.3,<2
-langchain-text-splitters>=0.3,<2
-langchain-huggingface>=0.1,<2
-langchain-chroma>=0.1,<2
-langgraph>=0.2,<2
-chromadb>=0.5,<2
-sentence-transformers>=3,<6
-pymupdf>=1.24,<2
-python-dotenv>=1,<2
-requests>=2.31,<3
-ipykernel>=6,<8
+# Procesamiento de documentos
+pymupdf>=1.24
+
+# Embeddings BGE-M3
+sentence-transformers>=3.0
+langchain-huggingface>=0.1
+
+# RAG y base vectorial
+langchain-core>=0.3
+langchain-text-splitters>=0.3
+langchain-chroma>=0.2
+chromadb>=0.5
+
+# Agente Plan-and-Execute
+langgraph>=0.2
+
+# Ollama Cloud
+ollama>=0.4
+
+# Configuración y evaluación
+python-dotenv>=1.0
+requests>=2.32
+pandas>=2.0
