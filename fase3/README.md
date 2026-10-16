@@ -1,5 +1,11 @@
 # EcoMarket — Taller Práctico #2 | Fase 3
 
+**Autores:** Anderson Pipicano, Fredy Alvarez  
+**Asignatura:** Inteligencia Artificial Generativa  
+**Objetivo:** Extender las capacidades de **EcoBot** (desarrollado inicialmente en el Taller Práctico #1) mediante una arquitectura **RAG (*Retrieval-Augmented Generation*)**, permitiéndole consultar una base de conocimiento vectorial interna para responder con precisión cualquier solicitud de los clientes o informar de manera transparente cuando no cuenta con las herramientas o información para atenderla.
+
+
+
 **Implementación de un sistema RAG para atención al cliente con un agente Plan-and-Execute**
 
 Esta fase amplía **EcoBot**, el asistente de atención al cliente de EcoMarket, mediante recuperación aumentada por generación (**RAG**). El sistema consulta documentos corporativos para responder preguntas sobre pedidos, productos, devoluciones, garantías y sostenibilidad. Además, integra un agente que **planifica consultas, ejecuta herramientas y evalúa si necesita realizar búsquedas adicionales**.
